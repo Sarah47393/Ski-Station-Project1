@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage ('GIT') {
             steps {
-                git branch: "mohamed-amine-taieb", 
+                git branch: "amine", 
                     credentialsId: 'github-credentials',
                     url: "https://github.com/Sarah47393/Ski-Station-Project.git";
             }
