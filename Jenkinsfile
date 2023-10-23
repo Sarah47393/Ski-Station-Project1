@@ -16,6 +16,13 @@ pipeline {
             }
         }
 
+	stage("Deploy to nexus") {
+            steps {
+                sh "mvn deploy"
+            }
+        }
+
+
         stage("Build Docker image") {
             steps {
                 sh "docker build -t ski ."
