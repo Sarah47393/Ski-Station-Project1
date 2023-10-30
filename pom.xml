@@ -65,7 +65,8 @@
         </plugins>
     </build>
 
-<distributionManagement>
+    <!-- Deploy to Nexus -->
+    <distributionManagement>
         <repository>
             <id>deploymentRepo</id>
             <name>Nexus Repository</name>
