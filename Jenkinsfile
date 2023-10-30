@@ -25,13 +25,13 @@ pipeline {
 
         stage("Build Docker image") {
             steps {
-                sh "sudo docker build -t ski ."
+                sh "docker build -t ski ."
             }
         }
 
         stage("Start App") {
             steps {
-                sh "sudo docker-compose up -d"
+                sh "docker-compose up -d"
             }
         }
     }
