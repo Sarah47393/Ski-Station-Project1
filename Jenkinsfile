@@ -22,7 +22,6 @@ pipeline {
             }
         }
 
-
         stage("Build Docker image") {
             steps {
                 sh "docker build -t ski ."
@@ -40,6 +39,5 @@ pipeline {
                 sh "mvn test"
             }
         }
-
     }
 }
