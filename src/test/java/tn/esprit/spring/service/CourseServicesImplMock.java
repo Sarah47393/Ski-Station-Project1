@@ -45,4 +45,11 @@ public class CourseServicesImplMock {
         Course c1 = courseService.retrieveCourse((long) 1);
         Assertions.assertNotNull(c1);
     };
+
+    @Test
+    public void testRetrieveAllCourses() {
+        Mockito.when(courseRepository.findAll()).thenReturn(listCourses);
+        List<Course> lcs = courseService.retrieveAllCourses();
+        Assertions.assertNotEquals(0, lcs.size());
+    };
 }
