@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import tn.esprit.SkiStationProject.SkiStationProjectApplication;
 import tn.esprit.SkiStationProject.entities.Course;
 import tn.esprit.SkiStationProject.services.ICourseServices;
-
 import java.util.List;
 
 @SpringBootTest(classes = {SkiStationProjectApplication.class})
