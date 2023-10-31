@@ -10,15 +10,21 @@ pipeline {
             }
         }
 
-        stage("Build") {
+        stage("JUnit/Mockito") {
             steps {
-                sh "mvn clean package -DskipTests"
+                sh "mvn test"
             }
         }
 
-	stage("Deploy to nexus") {
+        stage("Build") {
             steps {
-                sh "mvn deploy -DskipTests"
+                sh "mvn clean package"
+            }
+        }
+
+	    stage("Deploy to nexus") {
+            steps {
+                sh "mvn deploy"
             }
         }
 
