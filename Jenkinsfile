@@ -10,21 +10,15 @@ pipeline {
             }
         }
 
-        stage("JUnit/Mockito") {
-            steps {
-                sh "mvn test"
-            }
-        }
-
         stage("Build") {
             steps {
-                sh "mvn clean package"
+                sh "mvn clean package -DskipTests"
             }
         }
 
 	    stage("Deploy to nexus") {
             steps {
-                sh "mvn deploy"
+                sh "mvn deploy -DskipTests"
             }
         }
 
@@ -40,5 +34,12 @@ pipeline {
                 sh "docker-compose up -d"
             }
         }
+
+        stage("JUnit/Mockito") {
+            steps {
+                sh "mvn test"
+            }
+        }
+
     }
 }
