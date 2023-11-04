@@ -30,7 +30,13 @@ pipeline {
 
         stage("Build Docker image") {
             steps {
-                sh "docker build -t ski ."
+                sh "docker build -t mohamedaminetaieb/ski ."
+            }
+        }
+
+        stage("Push image to Docker Hub") {
+            steps {
+                sh "docker push mohamedaminetaieb/ski"
             }
         }
 
