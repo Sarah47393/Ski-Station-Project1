@@ -35,7 +35,7 @@ pipeline {
         stage("Build Docker image") {
             steps {
                 script {
-                    dockerimage = docker.build('mohamedaminetaieb/ski', 'mohamedaminetaieb/ski')
+                    dockerimage = docker.build('mohamedaminetaieb/ski', '.')
                 }
             }
         }
