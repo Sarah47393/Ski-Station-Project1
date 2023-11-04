@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        dockerimage = ""
-    }
-
     stages {
         stage ('GIT') {
             steps {
@@ -34,21 +30,13 @@ pipeline {
 
         stage("Build Docker image") {
             steps {
-                script {
-                    dockerimage = docker.build('mohamedaminetaieb/ski', '.')
-                }
+                sh "docker build -t mohamedaminetaieb/ski ."
             }
         }
 
         stage("Push image to Docker Hub") {
-            environment {
-                registryCredential = 'dockerhub-credentials'
-            }
             steps {
-                script {
-                    docker.withRegistry( 'https://registry.hub.docker.com', registryCredential )
-                    dockerimage.push("latest")
-                }
+                sh "docker push mohamedaminetaieb/ski:latest"
             }
         }
 
