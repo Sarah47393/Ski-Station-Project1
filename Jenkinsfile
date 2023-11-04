@@ -36,6 +36,7 @@ pipeline {
 
         stage("Push image to Docker Hub") {
             steps {
+                sh "docker login -u='mohamedaminetaieb' -p='213JMT4709'"
                 sh "docker push mohamedaminetaieb/ski:latest"
             }
         }
