@@ -12,10 +12,10 @@ pipeline {
 
         stage('SonarQube'){
             steps{
-                mvn sonar:sonar \
+               sh"mvn sonar:sonar \
                     -Dsonar.projectKey=maven-jenkins-pipeline \
                     -Dsonar.host.url=http://192.168.33.10:9000 \
-                    -Dsonar.login=935a41b8c82b5e52bd7c8cdea1c2d9ce6c593ced
+                    -Dsonar.login=935a41b8c82b5e52bd7c8cdea1c2d9ce6c593ced"
             }
         }
 
