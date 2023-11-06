@@ -9,6 +9,12 @@ pipeline {
                     url: "https://github.com/Sarah47393/Ski-Station-Project1.git";
             }
         }
+        stage("Build") {
+            steps {
+                sh "mvn -version"
+                bat "mvn clean package -DskipTests"
+            }
+        
 
         stage('SonarQube'){
             steps{
@@ -20,15 +26,7 @@ pipeline {
                 
         }
 
-       stage('Maven Clean Build') {
-            steps {
-                script {
-                    def mavenHome = tool name: "M2_HOME", type: "hudson.tasks.Maven$MavenInstallation"
-                    def mavenCMD = "${mavenHome}/bin/mvn"
-                    sh "${mavenCMD} clean package"
-                }
-            }
-        }
+       
        
     }
 }
