@@ -1,12 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        NEXUS_VERSION = "nexus3"
-        NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "192.168.33.10:8081"
-        NEXUS_REPOSITORY = "maven-releases"
-        NEXUS_CREDENTIAL_ID = "nexus-project-token"
+   environment {
+        registry = "gloria6056/jenkins-pipeline"
+        registryCredential = 'dockerhub_id'
+        dockerImage = ''
     }
     stages {
         stage ('GIT') {
@@ -17,6 +15,7 @@ pipeline {
                     url: "https://github.com/Sarah47393/Ski-Station-Project1.git";
             }
         }
+
         stage("Maven Build") {
             steps {
                 script {
@@ -26,7 +25,6 @@ pipeline {
             }
         }
        
-    
         stage('SonarQube'){
             steps{
                 withSonarQubeEnv('SonarQube'){
@@ -38,8 +36,18 @@ pipeline {
                 
         }
 
+        stage('JUnit/Mockito') {
+            steps {
+              script{
+                    echo "Test unitaire..."
+                    sh 'mvn test'
+                }
+            }
+        }
+
         stage("Deploy to nexus") {
             steps {
+                echo "Deploy to nexus..."
                 sh "mvn deploy -DskipTests=true"
             }
         }
@@ -48,35 +56,27 @@ pipeline {
             steps {
                 script{
                     echo "Building Docker Image..."
-                    sh "docker build -t gloria6056/ski ."
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
                 
             }
         }
 
-        stage("Push image to Docker Hub") {
-            steps {
-                echo "Push image to Docker Hub...."
-                sh "docker login -u='gloria6056' -p='TtYc2011?!'"
-                sh "docker push gloria6056/ski:latest"
-            }
+        stage('Deploy our image') {
+            steps{
+            script {
+            echo "Push image to Docker Hub...."
+            docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+                       }
+                 }
+               }
         }
 
-        stage("Start App") {
-            steps {
-                sh "docker-compose up -d"
-            }
-        }
+       
 
 
-       stage('JUnit/Mockito') {
-            steps {
-              script{
-                    echo "Test unitaire..."
-                    sh 'mvn test'
-                }
-            }
-        }
+       
                             
 
        
