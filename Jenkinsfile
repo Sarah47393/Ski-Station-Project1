@@ -15,7 +15,7 @@ pipeline {
                 bat "mvn clean package -DskipTests"
             }
         
-
+        }
         stage('SonarQube'){
             steps{
                 withSonarQubeEnv('SonarQube'){
