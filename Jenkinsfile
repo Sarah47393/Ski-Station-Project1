@@ -25,20 +25,8 @@ pipeline {
                 }
             }
         }
-        stage('Test ') {
-            steps {
-                script {
-                    sh 'mvn verify'
-                }
-            }
-        }
-        stage('Test Unit') {
-            steps {
-              script{
-                    sh 'mvn test'
-                }
-            }
-        }
+       
+    
         stage('SonarQube'){
             steps{
                 withSonarQubeEnv('SonarQube'){
@@ -50,41 +38,46 @@ pipeline {
                 
         }
 
-        stage("Nexus") {
+        stage("Deploy to nexus") {
             steps {
-                script {
-                    pom = readMavenPom file: "pom.xml";
-                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-                    artifactPath = filesByGlob[0].path;
-                    artifactExists = fileExists artifactPath;
-                    if(artifactExists) {
-                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
-                        nexusArtifactUploader(
-                            nexusVersion: NEXUS_VERSION,
-                            protocol: NEXUS_PROTOCOL,
-                            nexusUrl: NEXUS_URL,
-                            groupId: pom.groupId,
-                            version: pom.version,
-                            repository: NEXUS_REPOSITORY,
-                            credentialsId: NEXUS_CREDENTIAL_ID,
-                            artifacts: [
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: artifactPath,
-                                type: pom.packaging],
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: "pom.xml",
-                                type: "pom"]
-                            ]
-                        );
-                    } else {
-                        error "*** File: ${artifactPath}, could not be found";
-                    }
+                sh "mvn deploy -DskipTests=true"
+            }
+        }
+
+        stage("Build Docker image") {
+            steps {
+                script{
+                    echo "Building Docker Image..."
+                    sh "docker build -t gloria6056/ski ."
+                }
+                
+            }
+        }
+
+        stage("Push image to Docker Hub") {
+            steps {
+                echo "Push image to Docker Hub...."
+                sh "docker login -u='gloria6056' -p='TtYc2011?!'"
+                sh "docker push gloria6056/ski:latest"
+            }
+        }
+
+        stage("Start App") {
+            steps {
+                sh "docker-compose up -d"
+            }
+        }
+
+
+       stage('JUnit/Mockito') {
+            steps {
+              script{
+                    echo "Test unitaire..."
+                    sh 'mvn test'
                 }
             }
         }
+                            
 
        
        
