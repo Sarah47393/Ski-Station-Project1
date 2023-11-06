@@ -9,12 +9,12 @@ pipeline {
                     url: "https://github.com/Sarah47393/Ski-Station-Project1.git";
             }
         }
-        stage("Build") {
+        stage("Maven Build") {
             steps {
-                
-                sh "mvn clean package -DskipTests"
+                script {
+                    sh "mvn package -DskipTests=true"
+                }
             }
-        
         }
         stage('SonarQube'){
             steps{
