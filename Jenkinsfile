@@ -20,6 +20,12 @@ pipeline {
                 
         }
 
+        stage('Maven Clean Build'){
+                def mavenHome= tool name:"M2_HOME", type: "maven"
+                def mavenCMD= "/usr/share/maven"
+                sh "${mavenCMD} clean package "
+
+                }
        
        
     }
