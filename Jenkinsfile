@@ -21,10 +21,14 @@ pipeline {
         }
 
        stage('Maven Clean Build') {
-    def mavenHome = tool name: "M2_HOME", type: "maven"
-    def mavenCMD = "/usr/share/maven"
-    sh "${mavenCMD} clean package"
-}
+            steps {
+                script {
+                    def mavenHome = tool name: "M2_HOME", type: "hudson.tasks.Maven$MavenInstallation"
+                    def mavenCMD = "${mavenHome}/bin/mvn"
+                    sh "${mavenCMD} clean package"
+                }
+            }
+        }
        
     }
 }
