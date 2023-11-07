@@ -43,11 +43,7 @@ pipeline {
                     sh 'mvn test'
                 }
             }
-            post{
-                always{
-                    JUnit 'target/surefire-reports/*.xml'
-                }
-            }
+            
         }
 
         stage("Deploy to nexus") {
