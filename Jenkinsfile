@@ -16,22 +16,36 @@ pipeline {
             }
         }
 
-        stage("Maven Build") {
-            steps {
-                script {
-                    echo "Building with Maven..."
-                    sh "mvn package -DskipTests=true"
-                }
+       stage ('Build Artifact'){
+
+            steps{
+                echo "Building Artifact with Maven..."
+                sh "mvn clean package -DskipTests=true"
+                archive 'target/*.jar'
             }
+       }
+
+       stage('SonarQube'){
+            steps{
+                withSonarQubeEnv('SonarQube'){
+                    echo "Running SonarQube analysis..."
+                    sh "mvn sonar:sonar -Dsonar.projectKey=maven-jenkins-pipeline -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.login=e51d1dac06a170aa4f4af598de60eea87d83b4fc"
+                    
+            }
+                }
+                
         }
-       
-        
 
         stage('JUnit/Mockito') {
             steps {
               script{
                     echo "Test unitaire..."
                     sh 'mvn test'
+                }
+            }
+            post{
+                always{
+                    JUnit 'target/surefire-reports/*.xml'
                 }
             }
         }

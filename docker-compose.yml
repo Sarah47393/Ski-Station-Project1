@@ -1,0 +1,22 @@
+version: "3"
+services:
+nexus:
+    image: sonatype/nexus3
+    container_name: nexus
+    volumes:
+      - "nexus-data:/nexus-data"
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+
+sonarqube:
+    image: sonarqube:8.9.7-community  
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    expose:
+      - "9000"
+      
+volumes:
+  nexus-data: {}
