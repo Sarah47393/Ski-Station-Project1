@@ -1,22 +1,28 @@
-version: "3"
 services:
-nexus:
-    image: sonatype/nexus3
-    container_name: nexus
+db:
+    container_name: mysql
+    image: mysql
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=GloriaMESSENG
+    ports:
+      - '3307:3307'
     volumes:
-      - "nexus-data:/nexus-data"
+      - mysql:/var/lib/mysql
+      - $PWD/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  spring_app:
+    container_name: jenkins-pipeline
+    image: gloria6056/jenkins-pipeline
+    restart: on-failure
+    build: .
     ports:
-      - "8081:8081"
-    expose:
-      - "8081"
-
-sonarqube:
-    image: sonarqube:8.9.7-community  
-    container_name: sonarqube
-    ports:
-      - "9000:9000"
-    expose:
-      - "9000"
-      
+      - 9090:9090
+    depends_on:
+      - db
 volumes:
-  nexus-data: {}
+  mysql:
+    driver: local
