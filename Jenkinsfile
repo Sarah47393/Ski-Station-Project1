@@ -10,6 +10,12 @@ pipeline {
             }
         }
 
+        stage("Clean project") {
+            steps {
+                sh "mvn clean -DskipTests"
+            }
+        }
+
         stage("SonarQube") {
             steps {
                 sh "mvn sonar:sonar -Dsonar.projectKey=maven-jenkins-pipeline -Dsonar.host.url=http://localhost:9000 -Dsonar.login=e338e97519d5e0bf8ea0647db97a099c76fa1634"
@@ -18,7 +24,7 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "mvn clean package -DskipTests"
+                sh "mvn package -DskipTests"
             }
         }
 
